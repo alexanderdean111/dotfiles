@@ -60,6 +60,7 @@ OPTIONS:
     -3 Setup i3 config
     -k Setup keymap
     -d Remove the default dirs in ~ that I find useless
+    -e Setup test environment
 
 EOF
 }
@@ -155,15 +156,6 @@ install_tmux()
   backup_config_file $HOME/.tmux.conf
   log "Creating symlink: $HOME/.tmux.conf"
   ln -s "$ABS_DIR/tmux.conf" "$HOME/.tmux.conf"
-}
-
-setup_keymap()
-{
-  log "setting up xmodmap"
-  backup_config_file $Home/.xmodmap
-  log "Creating symlink: $HOME/.xmodmap"
-  ln -s "$ABS_DIR/xmodmap" "$HOME/.xmodmap"
-  xmodmap $HOME/.xmodmap
 }
 
 install_vim()
@@ -266,13 +258,27 @@ del_useless_dirs()
   rm -rf ~/Videos ~/Templates ~/Public ~/Music ~/Desktop
 }
 
+setup_test_env()
+{
+  log "installing cherry tree"
+  install_package cherrytree
+
+  log "installing python"
+  install_package python3
+  install_package virtualenv
+
+  log "installing curl"
+  install_package curl
+
+}
+
 # If executed with no options
 if [ $# -eq 0 ]; then
   usage
   exit $EX_USAGE
 fi
 
-while getopts ":hcztvgu3kd" opt; do
+while getopts ":hcztvgu3kde" opt; do
   case "$opt" in
     h)
       # Help message
@@ -307,12 +313,12 @@ while getopts ":hcztvgu3kd" opt; do
       # Setup i3 config
       install_i3
       ;;
-    k)
-      # Setup keymap
-      setup_keymap
-      ;;
     d)
       del_useless_dirs
+      ;;
+    e)
+      # Setup test environment
+      setup_test_env
       ;;
     *)
       # All other flags fall through to here
