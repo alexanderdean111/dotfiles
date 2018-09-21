@@ -1,0 +1,4 @@
+*.un~
+vim/
+*.swp
+i3_custom/
