@@ -19,9 +19,9 @@ tmux resize-pane -t $SESSION:1.0 -D 20
 tmux split-window -t $SESSION:1.0 -h
 
 # split right column into four rows
-tmux split-window -t $SESSION:1.2 -v
-tmux split-window -t $SESSION:1.2 -v
-tmux split-window -t $SESSION:1.3 -v
+#tmux split-window -t $SESSION:1.2 -v
+#tmux split-window -t $SESSION:1.2 -v
+#tmux split-window -t $SESSION:1.3 -v
 
 # resize left pane
 tmux resize-pane -t $SESSION:1.0 -R 30
