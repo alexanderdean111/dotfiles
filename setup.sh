@@ -265,7 +265,8 @@ setup_test_env()
 
   log "installing python"
   install_package python3
-  install_package virtualenv
+  install_package python3-dev
+  install_package python3-venv
 
   log "installing curl"
   install_package curl

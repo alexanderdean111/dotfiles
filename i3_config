@@ -214,5 +214,5 @@ exec xautolock -detectsleep \
     -time 5 -locker i3lock -i $lockscreen -t -n -e
 
 #exec_always --no-startup-id xmodmap ~/.xmodmap
-exec_always xrandr --output $monL --mode 1680x1050 --pos 0x0 --rotate normal --output $monR --mode 1680x1050 --pos 1680x0 --rotate normal
+#exec_always xrandr --output $monL --mode 1680x1050 --pos 0x0 --rotate normal --output $monR --mode 1680x1050 --pos 1680x0 --rotate normal
 #exec_always --no-startup-id /usr/bin/feh --bg-scale $desktop
