@@ -271,34 +271,34 @@ setup_test_env()
   log "installing curl"
   install_package curl
   
-  if which apt-get >/dev/null 2>&1; then 
+  #if which apt-get >/dev/null 2>&1; then 
     # Oracle Java repo
-    sudo add-apt-repository -y ppa:webupd8team/java
-    sudo apt update
-    sudo apt -y install oracle-java8-installer
+  #  sudo add-apt-repository -y ppa:webupd8team/java
+  #  sudo apt update
+  #  sudo apt -y install oracle-java8-installer
 
     # Elastic sources
-    wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-    rm -f /etc/apt/sources.list.d/elastic-6.x.list
-    echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
-    sudo apt update
+  #  wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+  #  rm -f /etc/apt/sources.list.d/elastic-6.x.list
+  #  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
+  #  sudo apt update
 
     # ELK stack
-    sudo apt install -y elasticsearch
-    sudo apt install -y kibana
-    sudo apt install -y logstash
+  #  sudo apt install -y elasticsearch
+  #  sudo apt install -y kibana
+  #  sudo apt install -y logstash
 
     # Enable and start them all
-    systemctl enable logstash
-    systemctl enable elasticsearch
-    systemctl enable kibana
+  #  systemctl enable logstash
+  #  systemctl enable elasticsearch
+  #  systemctl enable kibana
 
-    systemctl start logstash
-    systemctl start elasticsearch
-    systemctl start kibana
-  else
-    warning_log "ELK stack setup only supported on Ubuntu/Debian, skipping"
-  fi
+  #  systemctl start logstash
+  #  systemctl start elasticsearch
+  #  systemctl start kibana
+  #else
+  #  warning_log "ELK stack setup only supported on Ubuntu/Debian, skipping"
+  #fi
 }
 
 # If executed with no options
