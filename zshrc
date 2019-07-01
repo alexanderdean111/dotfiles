@@ -105,6 +105,9 @@ alias l="ls -lh"
 #  echo "tmux not installed"
 #fi
 
+# tmux setup
+tmux attach -t base || tmux new -s base
+
 ## SSH Agent Setup
 # map known SSH_AUTH_SOCK
 echo "using home directory: \"$HOME\""
