@@ -58,8 +58,7 @@ OPTIONS:
     -g Setup git version control
     -u Setup automatic updates for dotfiles
     -3 Setup i3 config
-    -d Remove the default dirs in ~ that I find useless
-    -e Setup test environment
+    -e Install misc. software
 
 EOF
 }
@@ -250,17 +249,10 @@ install_i3()
   ln -s "$ABS_DIR/i3status.conf" "$HOME/.i3status.conf"
 }
 
-del_useless_dirs()
-{
-  # Removes default dirs that I have no use for
-  log "deleting useless directories"
-  rm -rf ~/Videos ~/Templates ~/Public ~/Music ~/Desktop
-}
-
 setup_test_env()
 {
-  log "installing cherry tree"
-  install_package cherrytree
+  #log "installing cherry tree"
+  #install_package cherrytree
 
   log "installing python"
   install_package python3
@@ -340,9 +332,6 @@ while getopts ":hcztvgu3kde" opt; do
     3)
       # Setup i3 config
       install_i3
-      ;;
-    d)
-      del_useless_dirs
       ;;
     e)
       # Setup test environment
