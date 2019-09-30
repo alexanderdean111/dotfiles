@@ -56,7 +56,7 @@ OPTIONS:
     -t Install and setup tmux
     -v Install and setup vim editor
     -g Setup git version control
-    -u Setup crontab updates
+    -u Setup automatic updates for dotfiles
     -3 Setup i3 config
     -k Setup keymap
     -d Remove the default dirs in ~ that I find useless
