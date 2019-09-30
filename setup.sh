@@ -58,7 +58,6 @@ OPTIONS:
     -g Setup git version control
     -u Setup automatic updates for dotfiles
     -3 Setup i3 config
-    -k Setup keymap
     -d Remove the default dirs in ~ that I find useless
     -e Setup test environment
 
