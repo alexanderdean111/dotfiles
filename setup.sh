@@ -262,6 +262,8 @@ setup_test_env()
   log "installing curl"
   install_package curl
   
+  log "install jq"
+  install_package jq
   #if which apt-get >/dev/null 2>&1; then 
     # Oracle Java repo
   #  sudo add-apt-repository -y ppa:webupd8team/java
