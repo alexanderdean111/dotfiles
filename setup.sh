@@ -149,6 +149,10 @@ install_tmux()
     install_package tmux
   fi
 
+  if ! command -v xclip >/dev/null 2>&1; then
+    install_package xclip
+  fi
+
   # link config
   clone_dotfiles
   backup_config_file $HOME/.tmux.conf
