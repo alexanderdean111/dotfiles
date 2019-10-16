@@ -267,6 +267,12 @@ misc_software()
 
   log "installing xclip"
   install_package xclip
+
+  log "deleting stupid default directories"
+  rmdir ~/Templates
+  rmdir ~/Music
+  rmdir ~/Public
+  rmdir ~/Videos
 }
 
 # If executed with no options
