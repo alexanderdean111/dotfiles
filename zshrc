@@ -84,6 +84,7 @@ source $ZSH/oh-my-zsh.sh
 alias rm="rm -i"
 alias mv="mv -i"
 alias cp="cp -i"
+alias grep="grep --color=always"
 
 alias l="ls -lh"
 
@@ -133,3 +134,5 @@ export SSH_AGENT_PID="$(cat $HOME/.ssh/.auth_pid)"
 
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+export PATH=$HOME/.toolbox/bin:$PATH
