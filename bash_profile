@@ -10,4 +10,4 @@ fi
 PATH=$PATH:$HOME/.local/bin:$HOME/bin
 
 export PATH
-exec /bin/zsh
+exec /usr/bin/zsh

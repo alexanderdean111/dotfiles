@@ -88,6 +88,12 @@ alias grep="grep --color=always"
 
 alias l="ls -lh"
 
+# strip bash color codes
+alias strip_bash_colors="sed 's/\x1b\[[0-9;]*m//g'"
+
+# copy to system clipboard
+alias xcopy="xclip -selection clipboard"
+
 ## Automatically start up or attach to tmux session if it is installed
 #TMUX_INSTALLED=$(which tmux)
 #if [[ "$?" == "0" ]]; then
