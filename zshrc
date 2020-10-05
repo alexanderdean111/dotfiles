@@ -94,6 +94,15 @@ alias strip_bash_colors="sed 's/\x1b\[[0-9;]*m//g'"
 # copy to system clipboard
 alias xcopy="xclip -selection clipboard"
 
+#go back one git commit
+alias gitback="git checkout $(git log -2 HEAD --pretty=format:%h | sed -n '2 p')"
+
+# termiante tmux sessions that aren't "base"
+tmuxclean() {
+  for x in $(tmux ls | cut -d" " -f1 | tr -d ":" | grep -v base); do
+    tmux kill-session -t $x
+  done
+}
 ## Automatically start up or attach to tmux session if it is installed
 #TMUX_INSTALLED=$(which tmux)
 #if [[ "$?" == "0" ]]; then
