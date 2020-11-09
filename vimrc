@@ -56,7 +56,8 @@ set ttyfast
 set ruler
 set backspace=indent,eol,start
 set laststatus=2
-set relativenumber
+" set relativenumber
+set number
 set ruler
 set pastetoggle=<F2> " toggle paste mode on/off
 
@@ -129,6 +130,9 @@ vnoremap . :norm. <CR>
 
 " strip all trailing whitespace in the current file with <leader>W
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+
+" NERDTree
+map <C-n> :NERDTreeToggle<CR>
 
 " forgot sudo vim
 cmap fuck w !sudo tee % >/dev/null
