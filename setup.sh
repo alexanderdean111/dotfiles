@@ -186,6 +186,12 @@ install_vim()
   if [[ $ret =~ "already exists" ]]; then
     warning_log "vim-flake8 already installed, skipping"
   fi
+  
+  ret=$(git clone https://github.com/preservim/nerdtree.git \
+    $ABS_DIR/vim/bundle/nerdtree 2>&1)
+  if [[ $ret =~ "already exists" ]]; then
+    warning_log "nerdtree already installed, skipping"
+  fi
 
   # link vim modules config
   backup_config_file $HOME/.vim
