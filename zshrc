@@ -2,7 +2,6 @@
 export ZSH=$HOME/.oh-my-zsh
 export TERM="xterm-256color"
 
-#ZSH_THEME="powerlevel9k/powerlevel9k"
 ZSH_THEME="ys"
 plugins=(git)
 
@@ -24,7 +23,7 @@ alias strip_bash_colors="sed 's/\x1b\[[0-9;]*m//g'"
 # copy to system clipboard
 alias xcopy="xclip -selection clipboard"
 
-#go back one git commit
+# go back one git commit
 alias gitback="git checkout $(git log -2 HEAD --pretty=format:%h | sed -n '2 p')"
 
 # termiante tmux sessions that aren't "base"
@@ -33,15 +32,17 @@ tmuxclean() {
     tmux kill-session -t $x
   done
 }
+
+# command to start logging a tmux pane manually
+logpane() {
+  mkdir -p ~/tmux_terminal_logs
+  tmux pipe-pane -o 'cat >> ~/tmux_terminal_logs/tmux_output.#S:#W-#P'
+}
+
 # tmux setup
 tmux attach -t base || tmux new -s base
-
-# start tmux terminal logging
-if [ ! -d ~/tmux_terminal_logs ]; then
-  echo "no terminal logs directory, creating ~/tmux_terminal_logs"
-  mkdir ~/tmux_terminal_logs
-fi
-tmux pipe-pane -o 'cat >>~/tmux_terminal_logs/tmux_output.#S:#W-#P'
+mkdir -p ~/tmux_terminal_logs
+tmux pipe-pane -o 'cat >> ~/tmux_terminal_logs/tmux_output.#S:#W-#P'
 
 ## SSH Agent Setup
 # map known SSH_AUTH_SOCK
