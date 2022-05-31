@@ -82,7 +82,7 @@ vnoremap <tab> %
 set wrap
 set textwidth=79
 set formatoptions=qrn1
-set colorcolumn=80
+"set colorcolumn=80
 
 " invisible characters
 set list
