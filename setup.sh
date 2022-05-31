@@ -28,7 +28,7 @@ install_package()
 {
   log "installing $1"
   if which apt-get >/dev/null 2>&1; then
-    sudo http_proxy=$http_proxy https_proxy=$https_proxy apt install -y $1
+    sudo http_proxy=$http_proxy https_proxy=$https_proxy apt install -y $1 
   elif which dnf >/dev/null 2>&1; then
     sudo http_proxy=$http_proxy https_proxy=$https_proxy dnf install -y $1
   elif which yum >/dev/null 2>&1; then
@@ -47,18 +47,15 @@ usage()
   cat << EOF
 Usage $0 [options]
 
-Setup a Linux system.
-
 OPTIONS:
     -h Show this message
-    -a Do everything except i3 setup
+    -a Do everything
     -c Clone configuration files
     -z Install and setup ZSH shell
     -t Install and setup tmux
     -v Install and setup vim editor
     -u Setup automatic updates for dotfiles
     -s Install misc. software
-    -3 Setup i3 config
 
 EOF
 }
@@ -161,34 +158,22 @@ install_tmux()
 
 install_vim()
 {
-  # install Pathogen
-  log "installing Pathogen"
 
-  ret=$(git clone https://github.com/tpope/vim-pathogen.git \
-    $ABS_DIR/vim/vim-pathogen 2>&1)
-  if [[ $ret =~ "already exists" ]]; then
-    warning_log "Pathogen already installed, skipping"
-  else
-    mkdir -p "$ABS_DIR/vim/autoload"
-    ln -s "$ABS_DIR/vim/vim-pathogen/autoload/pathogen.vim" \
-      "$ABS_DIR/vim/autoload/pathogen.vim"
-  fi
-
-  log "installing plugins"
+  log "installing vim plugins"
   ret=$(git clone https://github.com/vim-syntastic/syntastic.git \
-    $ABS_DIR/vim/bundle/syntastic 2>&1)
+    $ABS_DIR/vim/pack/vendor/start/syntastic 2>&1)
   if [[ $ret =~ "already exists" ]]; then
     warning_log "Syntastic already installed, skipping"
   fi
 
   ret=$(git clone https://github.com/nvie/vim-flake8.git \
-    $ABS_DIR/vim/bundle/vim-flake8 2>&1)
+    $ABS_DIR/vim/pack/vendor/start/vim-flake8 2>&1)
   if [[ $ret =~ "already exists" ]]; then
     warning_log "vim-flake8 already installed, skipping"
   fi
   
   ret=$(git clone https://github.com/preservim/nerdtree.git \
-    $ABS_DIR/vim/bundle/nerdtree 2>&1)
+    $ABS_DIR/vim/pack/vendor/start/nerdtree 2>&1)
   if [[ $ret =~ "already exists" ]]; then
     warning_log "nerdtree already installed, skipping"
   fi
@@ -220,58 +205,16 @@ install_git()
   ln -s $ABS_DIR/gitconfig $HOME/.gitconfig
 }
 
-install_i3()
-{
-  # Install i3 WM if it isn't already installed
-  if ! command -v i3 >/dev/null 2>&1; then
-    install_package i3
-  fi
-
-  # Install i3status, used by i3 WM, if it isn't already installed
-  if ! command -v i3status >/dev/null 2>&1; then
-    install_package i3status
-  fi
-
-  # Install feh, if it isn't already installed
-  if ! command -v feh >/dev/null 2>&1; then
-    install_package feh
-  fi
-
-  # Clone configs, including i3 and i3status configurations
-  clone_dotfiles
-
-  # Create required dir for i3 config, if it doesn't exist
-  # otherwise, back it up
-  if [ ! -d $HOME/.i3 ]
-  then
-    mkdir $HOME/.i3
-  fi
-
-  # link config
-  backup_config_file $HOME/.i3/config
-  log "Creating symlink: $HOME/.i3/config"
-  ln -s "$ABS_DIR/i3_config" "$HOME/.i3/config"
-
-  # link i3status config
-  backup_config_file $HOME/.i3status.conf
-  log "Creating symlink: $HOME/.i3status.conf"
-  ln -s "$ABS_DIR/i3status.conf" "$HOME/.i3status.conf"
-}
-
 misc_software()
 {
-  log "installing python"
   install_package python3
   install_package python3-dev
   install_package python3-venv
 
-  log "installing curl"
   install_package curl
   
-  log "installing jq"
   install_package jq
 
-  log "installing xclip"
   install_package xclip
 
   log "deleting stupid default directories"
@@ -287,7 +230,7 @@ if [ $# -eq 0 ]; then
   exit $EX_USAGE
 fi
 
-while getopts ":hacztvu3s" opt; do
+while getopts ":hacztvus" opt; do
   case "$opt" in
     h)
       # Help message
@@ -322,10 +265,6 @@ while getopts ":hacztvu3s" opt; do
     u)
       # Setup cron updates
       setup_cron_updates
-      ;;
-    3)
-      # Setup i3 config
-      install_i3
       ;;
     s)
       # Install misc. software
