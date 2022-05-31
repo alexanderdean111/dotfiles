@@ -21,8 +21,9 @@ alias l="ls -lh"
 # strip bash color codes
 alias strip_bash_colors="sed 's/\x1b\[[0-9;]*m//g'"
 
-# copy to system clipboard
+# system clipboard commands
 alias xcopy="xclip -selection clipboard"
+alias xpaste="xclip -out -selection clipboard"
 
 #go back one git commit
 alias gitback="git checkout $(git log -2 HEAD --pretty=format:%h | sed -n '2 p')"
