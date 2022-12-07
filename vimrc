@@ -10,7 +10,7 @@ let maplocalleader=","
 highlight BadWhitespace ctermbg=red guibg=red
 
 " Remap Flake8 Key
-autocmd FileType python map <buffer> <leader>a :call Flake8()<CR>
+" autocmd FileType python map <buffer> <leader>a :call Flake8()<CR>
 
 set modelines=0
 set background=dark " makes it easier to read

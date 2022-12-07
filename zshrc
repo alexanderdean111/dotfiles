@@ -67,5 +67,10 @@ else
 fi
 
 export SSH_AGENT_PID="$(cat $HOME/.ssh/.auth_pid)"
+export PATH=$PATH:$HOME/.bin
+export PATH=$PATH:$HOME/.toolbox/bin
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$HOME/go/bin
 
-export PATH=$HOME/.toolbox/bin:$PATH
+
+export PATH=$PATH:$HOME/.toolbox/bin
