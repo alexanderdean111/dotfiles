@@ -137,6 +137,9 @@ install_zsh()
   backup_config_file $HOME/.bash_profile
   log "Creating symlink: $HOME/.bash_profile"
   ln -s "$ABS_DIR/bash_profile" "$HOME/.bash_profile"
+
+  # Launch zsh at the end of .bashrc
+  echo -e "$(which zsh)" >> "$HOME/.bashrc"
 }
 
 install_tmux()
