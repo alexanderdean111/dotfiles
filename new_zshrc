@@ -257,7 +257,7 @@ if [ -f /etc/zsh_command_not_found ]; then
     . /etc/zsh_command_not_found
 fi
 
-plugins=(git)
+#plugins=(git)
 
 # User configuration
 
@@ -293,13 +293,13 @@ logpane() {
 }
 
 # tmux setup
-tmux attach -t base || tmux new -s base
+tmux attach -t base >/dev/null 2>&1 || tmux new -s base >/dev/null 2>&1
 mkdir -p ~/tmux_terminal_logs
 tmux pipe-pane -o 'cat >> ~/tmux_terminal_logs/tmux_output.#S:#W-#P'
 
 ## SSH Agent Setup
 # map known SSH_AUTH_SOCK
-echo "using home directory: \"$HOME\""
+echo "[+] using home directory: \"$HOME\""
 mkdir -p "$HOME/.ssh"
 export SSH_AUTH_SOCK="$HOME/.ssh/.auth_socket"
 
@@ -311,7 +311,7 @@ else
 fi
 
 if [ -z "$check_pid" ]; then
-  echo "No ssh-agent running, starting one up..."
+  echo "[+] no ssh-agent running, starting one up..."
   # clear remnants
   rm -f $HOME/.ssh/.auth_socket >/dev/null
   rm -f $HOME/.ssh/.auth_pid >/dev/null
@@ -320,7 +320,7 @@ if [ -z "$check_pid" ]; then
   echo "$SSH_AGENT_PID" > $HOME/.ssh/.auth_pid
   ssh-add 2>/dev/null
 else
-  echo "ssh-agent already running"
+  echo "[+] ssh-agent already running"
 fi
 
 export SSH_AGENT_PID="$(cat $HOME/.ssh/.auth_pid)"
