@@ -71,6 +71,7 @@ setup_dotfiles() {
   chmod 700 "$HOME/.ssh"
   chmod 600 "$HOME/.ssh/id_ed25519_github"
   chmod 600 "$HOME/.ssh/id_ed25519_github.pub"
+  ssh-add "$HOME/.ssh/id_ed25519_github"
 
   # clone the dotfiles directory into ~/dev/dotfiles
   log "cloning dotfiles to $DOTFILES_PATH"
