@@ -41,7 +41,7 @@ logpane() {
 }
 
 # tmux setup
-tmux attach -t base || tmux new -s base
+tmux attach -t base 2>&1 >/dev/null || tmux new -s base 2>&1 >/dev/null
 mkdir -p ~/tmux_terminal_logs
 tmux pipe-pane -o 'cat >> ~/tmux_terminal_logs/tmux_output.#S:#W-#P'
 
