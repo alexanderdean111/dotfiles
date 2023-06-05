@@ -180,8 +180,10 @@ install_vim() {
 }
 
 misc_software() {
-  install_package python3
-  install_package python3-dev
+  # get python3 repo setup
+  sudo add-apt-repository ppa:deadsnakes/ppa
+  install_package python3.11
+  install_package python3.11-dev
   install_package python3-venv
 
   install_package curl
