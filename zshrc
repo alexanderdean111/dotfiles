@@ -27,6 +27,10 @@ alias xpaste="xclip -out -selection clipboard"
 # go back one git commit
 alias gitback="git checkout $(git log -2 HEAD --pretty=format:%h | sed -n '2 p')"
 
+# quick proxy on/off
+alias proxyon="export http_proxy=http://127.0.0.1:8080;export https_proxy=http://127.0.0.1:8080"
+alias proxyoff="unset http_proxy;unset https_proxy"
+
 # termiante tmux sessions that aren't "base"
 tmuxclean() {
   for x in $(tmux ls | cut -d" " -f1 | tr -d ":" | grep -v base); do
@@ -67,9 +71,10 @@ else
 fi
 
 export SSH_AGENT_PID="$(cat $HOME/.ssh/.auth_pid)"
-export PATH=$PATH:$HOME/.bin
-export PATH=$PATH:$HOME/.toolbox/bin
-export PATH=$PATH:/usr/local/go/bin
-export PATH=$PATH:$HOME/go/bin
-export PATH=$PATH:/opt/gradle/gradle-8.3/bin
-export PATH=$PATH:$HOME/.toolbox/bin
+
+# if we have a $HOME/.localZshMods file defined, load it now
+# use this file for random path additions and aliases/mods specific to current
+# machine without polluting main zshrc file
+if [ -f "$HOME/.localZshMods" ]; then
+  source "$HOME/.localZshMods"
+fi
