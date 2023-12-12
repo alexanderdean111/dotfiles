@@ -75,11 +75,11 @@ setup_dotfiles() {
   chmod 700 "$HOME/.ssh"
   chmod 600 "$HOME/.ssh/id_ed25519_github"
   chmod 600 "$HOME/.ssh/id_ed25519_github.pub"
-  ssh-add "$HOME/.ssh/id_ed25519_github"
 
   # make sure git is using SSH so we can push updates
   log "fixing git URL"
-  sed -iE 's/url = \S+/url = git@github.com:alexanderdean111\/dotfiles/' "$ABS_DIR/.git/config"
+  cat "$ABS_DIR/.git/config" | sed -E 's/url = \S+/url = git@github.com:alexanderdean111\/dotfiles/' > "$ABS_DIR/.git/config.new"
+  mv -f "$ABS_DIR/.git/config.new" "$ABS_DIR/.git/config"
 }
 
 backup_config_file() {
