@@ -2,7 +2,7 @@
 
 ABS_PATH=$(readlink -f "$0")
 ABS_DIR=$(dirname "$ABS_PATH")
-DOTFILES_PATH="$HOME/dev/dotfiles"
+DOTFILES_PATH="$ABS_DIR"
 
 log() {
   echo -e "\033[0;32m[+] $1\033[0m"
@@ -57,6 +57,10 @@ setup_dotfiles() {
   # SSH keys need decrypted
   log "decrypting SSH keys"
   gpg --no-symkey-cache "$ABS_DIR/keys.tgz.gpg"
+  if [ ! -f "$ABS_DIR/keys.tgz" ]; then
+    error_log "Failed to decrypt SSH keys, bad password"
+    exit 1
+  fi
   tar zxf "$ABS_DIR/keys.tgz" -C "$ABS_DIR"
   rm -f "$ABS_DIR/keys.tgz"
 
@@ -73,13 +77,9 @@ setup_dotfiles() {
   chmod 600 "$HOME/.ssh/id_ed25519_github.pub"
   ssh-add "$HOME/.ssh/id_ed25519_github"
 
-  # clone the dotfiles directory into ~/dev/dotfiles
-  log "cloning dotfiles to $DOTFILES_PATH"
-  mkdir -p "$HOME/dev"
-  git clone git@github.com:alexanderdean111/dotfiles "$DOTFILES_PATH"
-  cd "$DOTFILES_PATH"
-  git config user.email "alexander.dean111@gmail.com"
-  git config user.name "Alexander Dean"
+  # make sure git is using SSH so we can push updates
+  log "fixing git URL"
+  sed -iE 's/url = \S+/url = git@github.com:alexanderdean111\/dotfiles/' "$ABS_DIR/.git/config"
 }
 
 backup_config_file() {
@@ -191,12 +191,6 @@ misc_software() {
   install_package jq
 
   install_package xclip
-
-  log "deleting stupid default directories"
-  rmdir ~/Templates >/dev/null 2>&1
-  rmdir ~/Music >/dev/null 2>&1
-  rmdir ~/Public >/dev/null 2>&1
-  rmdir ~/Videos >/dev/null 2>&1
 }
 
 # If executed with no options
@@ -205,6 +199,12 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
+if [ "$(whoami)" == "root" ]; then
+  error_log "Don't run as root, script will ask for sudo creds when it needs them"
+fi
+
+echo "ABS_PATH: $ABS_PATH"
+echo "ABS_DIR: $ABS_DIR"
 
 while getopts ":hacztvus" opt; do
   case "$opt" in
