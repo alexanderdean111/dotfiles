@@ -3,11 +3,11 @@ export ZSH=$HOME/.oh-my-zsh
 export TERM="xterm-256color"
 
 ZSH_THEME="ys"
-#plugins=(git)
-
-# User configuration
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+
+# User configuration
 
 # Stupid proof destructive commands¬
 alias rm="rm -i"
@@ -23,9 +23,6 @@ alias strip_bash_colors="sed 's/\x1b\[[0-9;]*m//g'"
 # system clipboard commands
 alias xcopy="xclip -selection clipboard"
 alias xpaste="xclip -out -selection clipboard"
-
-# go back one git commit
-alias gitback="git checkout $(git log -2 HEAD --pretty=format:%h | sed -n '2 p')"
 
 # quick proxy on/off
 alias proxyon="export http_proxy=http://127.0.0.1:8080;export https_proxy=http://127.0.0.1:8080"
