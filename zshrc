@@ -3,7 +3,7 @@ export ZSH=$HOME/.oh-my-zsh
 export TERM="xterm-256color"
 
 ZSH_THEME="ys"
-plugins=(git)
+#plugins=(git)
 
 # User configuration
 
@@ -45,7 +45,7 @@ logpane() {
 }
 
 # tmux setup
-tmux attach -t base 2>&1 >/dev/null || tmux new -s base 2>&1 >/dev/null
+tmux attach -t base 2> /dev/null || tmux new -s base 2> /dev/null
 mkdir -p ~/tmux_terminal_logs
 tmux pipe-pane -o 'cat >> ~/tmux_terminal_logs/tmux_output.#S:#W-#P'
 
