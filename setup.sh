@@ -113,18 +113,13 @@ install_zsh() {
   # Install and configure ZSH. Can be used stand-alone.
   install_package zsh
 
+  # oh-my-zsh installation
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
   # link config
   backup_config_file $HOME/.zshrc
   log "Creating symlink: $HOME/.zshrc"
   ln -s "$DOTFILES_PATH/zshrc" "$HOME/.zshrc"
-
-  # Grab general ZSH config via oh-my-zsh project
-  # See https://github.com/robbyrussell/oh-my-zsh
-  ret=$(git clone https://github.com/robbyrussell/oh-my-zsh.git \
-    $HOME/.oh-my-zsh >/dev/null 2>&1)
-  if [[ $ret =~ "already exists" ]]; then
-    warning_log "oh-my-zsh config already exists"
-  fi
 
   # Set ZSH as my default shell
   backup_config_file $HOME/.bash_profile
