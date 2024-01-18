@@ -9,7 +9,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# Stupid proof destructive commands¬
+# Stupid proof destructive commands
 alias rm="rm -i"
 alias mv="mv -i"
 alias cp="cp -i"
