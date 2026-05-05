@@ -40,11 +40,11 @@ OPTIONS:
     -h Show this message
     -a Do everything
     -c Clone configuration files
-    -z Install and setup ZSH shell
+    -b Install and setup bash shell
     -t Install and setup tmux
     -v Install and setup vim editor
     -u Setup automatic updates for dotfiles
-    -s Install misc. software
+    -s Install misc software
 
 EOF
 }
@@ -109,25 +109,19 @@ setup_cron_updates() {
   rm $ABS_DIR/crontab
 }
 
-install_zsh() {
-  # Install and configure ZSH. Can be used stand-alone.
-  install_package zsh
+install_bash() {
+  # Install and configure bash. Can be used stand-alone.
+  install_package bash
 
-  # oh-my-zsh installation
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  # link bashrc
+  backup_config_file $HOME/.bashrc
+  log "Creating symlink: $HOME/.bashrc"
+  ln -s "$DOTFILES_PATH/bashrc" "$HOME/.bashrc"
 
-  # link config
-  backup_config_file $HOME/.zshrc
-  log "Creating symlink: $HOME/.zshrc"
-  ln -s "$DOTFILES_PATH/zshrc" "$HOME/.zshrc"
-
-  # Set ZSH as my default shell
+  # link bash_profile (sources ~/.bashrc on login shells)
   backup_config_file $HOME/.bash_profile
   log "Creating symlink: $HOME/.bash_profile"
   ln -s "$DOTFILES_PATH/bash_profile" "$HOME/.bash_profile"
-
-  # Launch zsh at the end of .bashrc
-  echo -e "$(which zsh)" >> "$HOME/.bashrc"
 }
 
 install_tmux() {
@@ -140,26 +134,44 @@ install_tmux() {
   ln -s "$DOTFILES_PATH/tmux.conf" "$HOME/.tmux.conf"
 }
 
+install_or_update_vim_plugin() {
+  # $1 = git URL, $2 = destination directory
+  local url="$1"
+  local dest="$2"
+  local name
+  name=$(basename "$dest")
+  if [ -d "$dest/.git" ]; then
+    log "updating vim plugin: $name"
+    if ! git -C "$dest" pull --ff-only --quiet; then
+      warning_log "failed to update $name"
+    fi
+  else
+    log "installing vim plugin: $name"
+    git clone --quiet "$url" "$dest"
+  fi
+}
+
+remove_old_vim_plugin() {
+  # $1 = destination directory of a plugin we no longer want
+  local dest="$1"
+  local name
+  name=$(basename "$dest")
+  if [ -d "$dest" ]; then
+    warning_log "removing deprecated vim plugin: $name"
+    rm -rf "$dest"
+  fi
+}
+
 install_vim() {
 
-  log "installing vim plugins"
-  ret=$(git clone https://github.com/vim-syntastic/syntastic.git \
-    $DOTFILES_PATH/vim/pack/vendor/start/syntastic 2>&1)
-  if [[ $ret =~ "already exists" ]]; then
-    warning_log "Syntastic already installed, skipping"
-  fi
+  log "installing/updating vim plugins"
+  mkdir -p "$DOTFILES_PATH/vim/pack/vendor/start"
 
-  ret=$(git clone https://github.com/nvie/vim-flake8.git \
-    $DOTFILES_PATH/vim/pack/vendor/start/vim-flake8 2>&1)
-  if [[ $ret =~ "already exists" ]]; then
-    warning_log "vim-flake8 already installed, skipping"
-  fi
-  
-  ret=$(git clone https://github.com/preservim/nerdtree.git \
-    $DOTFILES_PATH/vim/pack/vendor/start/nerdtree 2>&1)
-  if [[ $ret =~ "already exists" ]]; then
-    warning_log "nerdtree already installed, skipping"
-  fi
+  install_or_update_vim_plugin https://github.com/dense-analysis/ale.git \
+    "$DOTFILES_PATH/vim/pack/vendor/start/ale"
+
+  install_or_update_vim_plugin https://github.com/preservim/nerdtree.git \
+    "$DOTFILES_PATH/vim/pack/vendor/start/nerdtree"
 
   # link vim modules config
   backup_config_file $HOME/.vim
@@ -175,14 +187,18 @@ install_vim() {
 }
 
 misc_software() {
-  # get python3 repo setup
-  sudo add-apt-repository ppa:deadsnakes/ppa
-  install_package python3.11
-  install_package python3.11-dev
-  install_package python3-venv
+  # get latest python3 repo setup (deadsnakes PPA)
+  install_package software-properties-common
+  sudo add-apt-repository -y ppa:deadsnakes/ppa
+  sudo http_proxy=$http_proxy https_proxy=$https_proxy apt update
+
+  # latest stable Python (3.14 as of 2026)
+  install_package python3.14
+  install_package python3.14-dev
+  install_package python3.14-venv
 
   install_package curl
-  
+
   install_package jq
 
   install_package xclip
@@ -201,7 +217,7 @@ fi
 echo "ABS_PATH: $ABS_PATH"
 echo "ABS_DIR: $ABS_DIR"
 
-while getopts ":hacztvus" opt; do
+while getopts ":hacbtvus" opt; do
   case "$opt" in
     h)
       # Help message
@@ -212,7 +228,7 @@ while getopts ":hacztvus" opt; do
       # Do everything
       setup_dotfiles
       misc_software
-      install_zsh
+      install_bash
       install_tmux
       install_vim
       setup_cron_updates
@@ -221,9 +237,9 @@ while getopts ":hacztvus" opt; do
       # Clone configuration files
       setup_dotfiles
       ;;
-    z)
-      # Install and setup ZSH shell
-      install_zsh
+    b)
+      # Install and setup bash shell
+      install_bash
       ;;
     t)
       # Install and setup tmux terminal multiplexer

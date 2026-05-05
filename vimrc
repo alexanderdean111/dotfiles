@@ -12,6 +12,13 @@ highlight BadWhitespace ctermbg=red guibg=red
 " Remap Flake8 Key
 " autocmd FileType python map <buffer> <leader>a :call Flake8()<CR>
 
+" ALE (Asynchronous Lint Engine) - replaces syntastic + vim-flake8
+let g:ale_linters = {'python': ['flake8']}
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_save = 1
+nnoremap <leader>a :ALELint<CR>
+
 set modelines=0
 set background=dark " makes it easier to read
 
@@ -111,8 +118,8 @@ nnoremap j gj
 nnoremap k gk
 
 " buffer switching
-:nnoremap <C-n> :bnext<CR>
-:nnoremap <C-p> :bprevious<CR>
+:nnoremap <leader>n :bnext<CR>
+:nnoremap <leader>p :bprevious<CR>
 
 " fucking shift
 nnoremap ; :
